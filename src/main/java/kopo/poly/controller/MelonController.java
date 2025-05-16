@@ -199,4 +199,64 @@ public class MelonController {
         return ResponseEntity.ok(
                 CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), rList));
     }
+
+    /**
+     * 가수 멤버 이름을(List 구조 필드) 추가하기
+     */
+    @PostMapping(value = "updateAddListField")
+    public ResponseEntity<CommonResponse<List<MelonDTO>>> updateAddListField(@RequestBody MelonDTO pDTO)
+            throws Exception {
+
+        log.info("{}.updateAddListField Start!", this.getClass().getName());
+
+        log.info("pDTO :{}", pDTO);
+
+        List<MelonDTO> rList = Optional.ofNullable(melonService.updateAddListField(pDTO))
+                .orElseGet(ArrayList::new);
+
+        log.info("{}.updateAddListField End!", this.getClass().getName());
+
+        return ResponseEntity.ok(
+                CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), rList));
+    }
+
+    /**
+     * 가수 이름이 방탄소년단을 BTS로 변경 및 필드 추가하기
+     */
+    @PostMapping(value = "updateFieldAndAddField")
+    public ResponseEntity<CommonResponse<List<MelonDTO>>> updateFieldAndAddField(@RequestBody MelonDTO pDTO)
+            throws Exception {
+
+        log.info("{}.updateFieldAndAddField Start!", this.getClass().getName());
+
+        log.info("pDTO :{}", pDTO);
+
+        List<MelonDTO> rList = Optional.ofNullable(melonService.updateFieldAndAddField(pDTO))
+                .orElseGet(ArrayList::new);
+
+        log.info("{}.updateFieldAndAddField End!", this.getClass().getName());
+
+        return ResponseEntity.ok(
+                CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), rList));
+    }
+
+    /**
+     * 가수 이름이 방탄소년단인 노래 삭제하기
+     */
+    @PostMapping(value = "deleteDocument")
+    public ResponseEntity<CommonResponse<List<MelonDTO>>> deleteDocument(@RequestBody MelonDTO pDTO)
+            throws Exception {
+
+        log.info("{}.deleteDocument Start!", this.getClass().getName());
+
+        log.info("pDTO :{}", pDTO);
+
+        List<MelonDTO> rList = Optional.ofNullable(melonService.deleteDocument(pDTO))
+                .orElseGet(ArrayList::new);
+
+        log.info("{}.deleteDocument End!", this.getClass().getName());
+
+        return ResponseEntity.ok(
+                CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), rList));
+    }
 }
