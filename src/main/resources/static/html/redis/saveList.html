@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redis List 구조 저장</title>
+    <link rel="stylesheet" href="/css/table.css"/>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // 동적으로 입력창 추가
+            $("#btnAdd").on("click", function () {
+                $("#textData").append('<input type="text" name="text"> ');
+                $("#textData").append('<input type="button" class="btnRemove" value="Remove">');
+                $("#textData").append("<br/>");
+
+                // 방금 추가된 remove 버튼에 이벤트 부여
+                $(".btnRemove").off("click").on("click", function () {
+                    $(this).prev().remove();  // 텍스트박스 제거
+                    $(this).next().remove();  // <br> 제거
+                    $(this).remove();         // 버튼 제거
+                });
+            });
+
+            // 저장 버튼 클릭 시
+            $("#btnSend").on("click", function () {
+
+                let jsonObj = [];  // List<RedisDTO> 전송 구조
+
+                let cnt = $("input[name=text]").length;
+
+                for (let i = 0; i < cnt; i++) {
+                    const data = {
+                        "text": $("input[name=text]").eq(i).val()
+                    };
+                    jsonObj.push(data);
+                }
+
+                // Ajax 호출
+                $.ajax({
+                    url: "/redis/v1/saveList",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(jsonObj)
+                }).then(function (json) {
+
+                    $("#redisData").empty(); // 기존 출력 제거
+
+                    const result = json.data;
+
+                    for (const data of result) {
+                        $("#redisData").append('<div class="divTableRow">');
+                        $("#redisData").append('<div class="divTableCell">' + data + '</div>');
+                        $("#redisData").append('</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<h2>Redis List 구조 저장</h2>
+<hr/><br/>
+
+<!-- 입력 영역 -->
+<div id="textData">
+    <input type="text" name="text">
+    <input type="button" class="btnRemove" value="Remove">
+    <br/>
+</div>
+
+<!-- 버튼 영역 -->
+<div>
+    <button id="btnAdd" type="button">추가</button>
+    <button id="btnSend" type="button">저장하기</button>
+</div>
+
+<br/><br/>
+
+<!-- 결과 출력 영역 -->
+<div class="divTable minimalistBlack">
+    <div class="divTableHeading">
+        <div class="divTableRow">
+            <div class="divTableHead">입력한 텍스트 값</div>
+        </div>
+    </div>
+    <div class="divTableBody" id="redisData">
+        <!-- 조회 결과가 여기에 출력됨 -->
+    </div>
+</div>
+</body>
+</html>

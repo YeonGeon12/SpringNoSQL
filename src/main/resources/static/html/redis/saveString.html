@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>단순 문자열 저장</title>
+    <link rel="stylesheet" href="/css/table.css"/>
+    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.serializeObject.min.js"></script>
+    <script type="text/javascript">
+
+        // HTML로딩이 완료되고 실행됨
+        $(document).ready(function(){
+
+            // 버튼 클릭했을때 발생되는 이벤트 생성
+            $("#btnSend").on("click", function() {
+
+                $.ajax({
+                    url: "/redis/v1/saveString",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                    data: JSON.stringify($("#f").serializeObject())
+
+                }).then(
+                    function(json) {
+
+                        $("#redisData").empty();
+
+                        $("#redisData").append("<div class=\"divTableRow\">");
+                        $("#redisData").append("<div class=\"divTableCell\">" + json.data.text + "</div>");
+                        $("#redisData").append("</div>");
+
+                    }
+                );
+            })
+        })
+    </script>
+</head>
+<body>
+<h2>Redis 단순 문자열 저장</h2>
+<hr/>
+<br/>
+<form name="f" id="f">
+    <div class="divTable minimalistBlack">
+        <div class="divTableBody">
+            <div class="divTableRow">
+                <div class="divTableCell" style="width: 30%">저장할 문자열</div>
+                <div class="divTableCell" style="width: 70%"><input type="text" name="text"></div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button id="btnSend" type="button">저장하기</button>
+    </div>
+</form>
+<br/><br/>
+<div class="divTable minimalistBlack">
+    <div class="divTableHeading">
+        <div class="divTableRow">
+            <div class="divTableHead">저장된 문자열</div>
+        </div>
+    </div>
+<div class="divTableBody" id="redisData"></div>
+</div>
+</body>
+</html>
